@@ -2,11 +2,11 @@
 import cmd
 from models.base_model import BaseModel
 from models import storage
+from models import State, City, Amenity, Place, Review
 
 
 class HBNBCommand(cmd.Cmd):
     """a class for the command interpreter"""
-
 
     prompt = "(hbnb)"
 
@@ -16,12 +16,11 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             try:
-            new_instance = eval(arg)()
-            new_instance.save()
+                new_instance = eval(arg)()
+                new_instance.save()
             print(new_instance.id)
-        except:
+        except NameError:
             print("** class doesn't exist **")
-
 
     def do_show(self, arg):
         """print the string representation of an instance"""
@@ -40,7 +39,6 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
                 else:
                     print(objects[key])
-
 
     def do_destroy(self, arg):
         """deletes an instance based on the class name and id"""
@@ -61,7 +59,6 @@ class HBNBCommand(cmd.Cmd):
                     del object[key]
                     storage.save()
 
-
     def do_all(self, arg):
         """print all string representation of all instances"""
         objects = storage.all()
@@ -72,8 +69,8 @@ class HBNBCommand(cmd.Cmd):
             if args[0] not in ["BaseModel", "User"]:
                 print("** class doesnt exist **")
             else:
-                print([str(obj) for key, obj in objects.items() if args[0] in key])
-
+                filtered_objects = [str(obj) for key, obj in objects.items() if args[0] in key]
+                print(filtered_objects)
 
     def do_update(self, arg):
         """updates an instance based on the class name and id."""
@@ -98,17 +95,14 @@ class HBNBCommand(cmd.Cmd):
                     setattr(objects[key], args[2], eval(args[3]))
                     storage.save()
 
-
     def do_quit(self, arg):
         """quit the command interpreter"""
         return True
-
 
     def do_EOF(self, arg):
         """exit the command interpreter at the end of the file"""
         print()
         return True
-
 
     def emptyline(self, arg):
         """do nothing when an empty line is created"""
